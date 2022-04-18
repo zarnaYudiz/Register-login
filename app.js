@@ -49,7 +49,7 @@ app.set('view engine', 'ejs');
 app.use(cors(corsOptions));
 app.use(helmet());      
 app.use(bodyParser.json({ limit: '16mb' }));
-app.use(bodyParser.urlencoded({ limit: '16mb', extended: true, parameterLimit: 50000 }));
+app.use(bodyParser.urlencoded({ limit: '16mb', extended: true, parameterLimit: 50000 }));   //TODO
 if (env.NODE_ENV !== 'prod' && env.NODE_ENV !== 'stag') app.use(morgan('dev', { skip: (req) => req.path === '/ping' || req.path === '/favicon.ico' }));
 app.use(express.static('./seeds'));
 app.use(routeConfig);

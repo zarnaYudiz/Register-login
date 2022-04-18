@@ -1,3 +1,4 @@
+const stripe = require('stripe')('sk_test_51KnjUNSICPCBToGuE3vJpRWS2OCndMmmW2VeDbd1CZ6bdywqVmvgHaBbPy3m48NNH2PLuPFqzXhIsXgGdZlAmZsG00OdL5fIsM');
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken');
 const env = require('../../../../config');
@@ -73,6 +74,21 @@ controllers.logout = async (req, res) => {
         console.log(error);
         res.reply(messages.server_error(), error);
     }
+};
+
+controllers.stripePayment = async (req, res) => {
+    const { purchase, totalAmount, shippingFee } = req.body;
+
+    const calculateOrderAmount = () => {
+        return totalAmount + shippingFee;
+    };
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: calculateOrderAmount(),
+        currency: 'usd',
+    });
+
+  res.json({ clientSecret: paymentIntent.client_secret });
 };
 
 module.exports = controllers;
